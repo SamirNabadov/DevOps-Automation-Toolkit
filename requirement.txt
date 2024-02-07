@@ -1,0 +1,5 @@
+python-gitlab==3.2.0
+gitPython==3.1.40
+hvac==1.1.0
+PyYAML==6.0
+colorama==0.4.6
