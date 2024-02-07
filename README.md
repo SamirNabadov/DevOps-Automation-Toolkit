@@ -42,7 +42,7 @@ This process leverages the `TemplateGenerator` class to:
 
 - **Branch-specific Values Files**: Tailored configurations for `Develop` and `Master` branches, ensuring environment-specific deployments with ease.
 - **ConfigMap Integration**: Automates the embedding of ConfigMap data into deployment templates, facilitating dynamic application configuration without manual intervention.
-- **Advanced Routing with Istio**: Leverages Istio Gateway and VirtualService for sophisticated routing strategies, accommodating complex deployment patterns and service mesh requirements.
+- **Routing with Istio**: Leverages Istio Gateway and VirtualService for sophisticated routing strategies, accommodating complex deployment patterns and service mesh requirements.
 - **Multi-PVC Support**: Supports the attachment of multiple Persistent Volume Claims (PVCs) within deployments, enabling versatile storage solutions tailored to the application needs.
 - **TLS Configuration in Istio**: Implements TLS settings at the Istio level for enhanced security, requiring the creation of a Kubernetes secret within the cluster which is then referenced in the Helm values.
 
@@ -74,35 +74,35 @@ Here is the folder structure for the project, providing a clear overview of the 
 ```
 project-root/
 │
-├── core/                      # Core functionality
-│   ├── authentication/        # Authentication modules
+├── core/                      
+│   ├── authentication/        
 │   │   └── auth_manager.py
 │   │
-│   ├── integration/           # Integration with external services
+│   ├── integration/           
 │   │   ├── vault_integration.py
 │   │   └── consul_integration.py
 │   │
-│   ├── operation/             # Operational scripts and utilities
+│   ├── operation/             
 │   │   ├── project_manager.py
 │   │   ├── repo_clone_manager.py
 │   │   ├── repo_push_manager.py
 │   │   └── template_handler.py
 │   │
-│   ├── settings/              # Configuration variables and validators
+│   ├── settings/              
 │   │   ├── config_variables.py
 │   │   └── config_validator.py
 │   │
-│   ├── template_library/      # Helm chart templates and configurations
+│   ├── template_library/      
 │   │   ├── helm_charts/
 │   │   │   ├── templates/
 │   │   │   ├── Chart.yml
 │   │   │   └── values.yml
 │   │
-│   └── utilities/             # Utility scripts
+│   └── utilities/             
 │       └── command_executor.py
 │
-├── .gitlab-ci.yml             # GitLab CI/CD configuration file
-└── main.py                    # Main entry point of the application
+├── .gitlab-ci.yml             
+└── main.py                    
 ```
 
 ## Core Components
@@ -166,7 +166,6 @@ The pipeline utilizes several custom variables to control the deployment process
 - `CI_PROJECT_TYPE_BACKEND_DMZ`: Indicates if the backend project is for a DMZ zone (`TRUE` or `FALSE`).
 - `CI_PROJECT_MODE`: Determines the project mode (`MONO` or `MULTI`).
 - `CI_APPLICATION_TYPE`: Configures the application type (`GRADLE`, `MAWEN`, `PYTHON`, `JS`).
-- `CI_APPLICATION_VERSION`: Sets the application version (`JAVA_11`, `JAVA_21`).
 - And more environment-specific variables to fine-tune the deployment and operational behaviors.
 
 These variables allow for a flexible pipeline that can be adjusted based on the project's requirements without altering the pipeline's code.
