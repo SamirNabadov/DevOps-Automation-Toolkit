@@ -1,1 +1,134 @@
+stages:
+  - deploy
 
+variables:
+  CI_PROJECT_CREATION:
+    value: GENERATION
+    description: "GENERATION NEW REPOSITORY FOR NEW PROJECTS"
+    options:
+      - GENERATION
+      - MIGRATION
+  CI_BRANCHING_TYPE:
+    value: GITFLOW
+    description: "SET BRANCHING TYPE"
+    options:
+      - GITFLOW
+      - GITHUBFLOW
+  CI_PROJECT_TYPE:
+    value: BACKEND
+    description: "SET PROJECT TYPE BACKEND FOR NON-DMZ ZONE"
+    options:
+      - BACKEND
+      - FRONTEND
+      
+  # For public backend projects must be: 
+  CI_PROJECT_TYPE_BACKEND_DMZ:
+    value: "FALSE"
+    options:
+      - "FALSE"
+      - "TRUE"
+    description: "SET PROJECT TYPE BACKEND FOR DMZ ZONE"
+  CI_PROJECT_MODE:
+    value: MONO
+    description: "SET PROJECT MODE"
+    options:
+      - MONO
+      - MULTI
+  CI_PROJECT_MM_MODULE_NAME: ""
+    #value: ""
+    #description: "SET MODULE NAME FOR MULTI MODULE REPO"
+  CI_PROJECT_MM_CODE_EXISTS: "FALSE"
+    #value: "FALSE"
+    #options:
+    #  - "FALSE"
+    #  - "TRUE"
+    #description: "ADDING NEW MODULE STATUS"
+  CI_APPLICATION_TYPE:
+    value: GRADLE
+    description: "SET APPLICATION TYPE"
+    options:
+      - GRADLE
+      - MAWEN
+      - PYTHON
+      - JS
+  CI_APPLICATION_VERSION:
+    value: "JAVA_11"
+    description: "SET APPLICATION VERSION"
+    options:
+      - "JAVA_11"
+      - "JAVA_21"
+  CI_RELEASE_TYPE:
+    value: JIB
+    description: "SET RELEASE TYPE"
+    options:
+      - JIB
+      - KANIKO
+  CI_CODE_STYLE: 
+    value: "TRUE"
+    options:
+      - "FALSE"
+      - "TRUE"
+    description: "ADD SONAR STAGE"
+  CI_CODE_CHECK_SNYK:
+    value: "FALSE"
+    options:
+      - "FALSE"
+      - "TRUE"
+    description: "ADD SNYK STAGE"
+  CI_PROJECT_TEST_STAGE: "FALSE"
+    #value: "FALSE"
+    #options:
+    #  - "FALSE"
+    #  - "TRUE"
+    #description: "ADD TEST STAGE"
+  CI_SUBGROUP_NAME:
+    value: ""
+    description: "ENTER GROUP NAME"
+  CI_PROJECT_NAME:
+    value: ""
+    description: "ENTER PROJECT NAME"
+  CD_HELM_NAMESPACE:
+    value: ""
+    description: "ENTER NAMESPACE NAME"
+  CD_HELM_PORT_POD_SVC_MGMT:
+    value: "8088 | 8088 | 8081"
+    description: "ENTER PORTS: CONTAINER | SERVICE | MANAGEMENT"  
+  CD_REPLICA_COUNT:
+    value: "1 | 2"
+    description: "REPLICA COUNT FOR DEV and PROD"
+    options:
+      - "1 | 2"
+      - "1 | 3"
+  CD_CLUSTER_TYPE:
+    value: "DEV | PROD"
+    description: "CLUSTER-TYPE FOR ENVIRONMENT"
+    options:
+      - "DEV | PROD"
+      - "DEVDMZ | PRODDMZ"
+      - "DEV | PROCDMZ"
+      - "DEVDMZ | PROCDMZ"
+  CD_HELM_DOMAIN: "local.az"
+    #value: "local.az"
+    #description: "DOMAIN NAME"
+
+  # Setting access to users for created repositories
+  # There must be a space between usernames
+  CI_ACCESS_MAINTAINER:
+    value: ""
+    description: "ENTER MAINTAINER USERS"
+  CI_ACCESS_DEVELOPER:
+    value: ""
+    description: "ENTER DEVELOPER USERS"
+
+deploy:
+  stage: deploy
+  image: gitlab.local.az:4567/devops/image/python:latest
+  before_script:
+  - git config --global user.email "${GIT_USER_EMAIL:-$GITLAB_USER_EMAIL}"
+  - git config --global user.name "${GIT_USER_NAME:-$GITLAB_USER_NAME}"
+  - pip3 install -r requirement.txt
+  script:
+    - python3 ./main.py
+  when: manual
+  tags:
+    - operation-03
