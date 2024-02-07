@@ -1,1 +1,9 @@
-
+{{- if .Values.rbac.enabled }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ .Values.applicationName }}
+  namespace: {{ .Values.namespace }}
+rules:
+{{ toYaml .Values.rbac.rules | indent 2 }}
+{{- end }}
