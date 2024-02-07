@@ -219,7 +219,7 @@ Other files required for deployment are k8s namespace, argocd application projec
 
 __Requirements__
 ------------
-* Python 3.9+ installed.
+* Image with Python 3.9+ installed.
 * Gitlab CI
 * Kubernetes cluster access with configured ArgoCD.
 * Vault by HashiCorp
