@@ -1,1 +1,31 @@
+{{- if .Values.cronjob.enabled }}
+{{- range .Values.cronjob.job }}
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ .name }}
+  namespace: {{ $.Values.namespace }}
+spec:
+  schedule: "{{ .schedule }}"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: {{ $.Values.applicationName }}
+          containers:
+          - name: copy-file-container
+            image: {{ .image }}
+            command:
+            - /bin/sh
+            - -c
+            - {{ .command | join " && " }}
+            volumeMounts:
+            - name: local-volume
+              mountPath: /local/path
+          volumes:
+          - name: local-volume
+            emptyDir: {}
+          restartPolicy: OnFailure
+{{- end }}
+{{- end }}
 
