@@ -213,7 +213,7 @@ class GitPushManager:
 
                 env = "dev" if branch in ["dev", "devdmz"] else "prod"
                 git_branch = "develop" if branch in ["dev", "devdmz"] else "master"
-                yaml_content = TemplateGenerator.generate_argocd_application_yaml(GitlabEnvConf.CI_SERVER_HOST, GitlabEnvConf.CI_SUBGROUP_NAME, env, MODULE, git_branch, GitlabEnvConf.CI_MAIN_GROUP, GitlabEnvConf.CD_GROUP_NAME, GitlabEnvConf.CI_PROJECT_NAME, GitlabEnvConf.CD_HELM_NAMESPACE)
+                yaml_content = TemplateGenerator.generate_argocd_application_yaml(GitlabEnvConf.CI_SERVER_HOST, GitlabEnvConf.CI_SUBGROUP_NAME, env, MODULE, git_branch, GitlabEnvConf.CD_GROUP_NAME, GitlabEnvConf.CI_PROJECT_NAME, GitlabEnvConf.CD_HELM_NAMESPACE)
                 CommandManager.save_dict_as_yaml(yaml_content, f"{PathConf.argo_workflow_app_path}/{CommandManager.convert_key_format(GitlabEnvConf.CI_SUBGROUP_NAME)}/{CommandManager.convert_key_format(GitlabEnvConf.CI_PROJECT_NAME)}.yml")
 
                 yaml_content = TemplateGenerator.generate_k8s_namespace_yaml(GitlabEnvConf.CD_HELM_NAMESPACE)
