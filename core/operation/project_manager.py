@@ -223,9 +223,6 @@ class GitlabProjectManager:
         project_name_devops_provisioning = f"{GitlabEnvConf.CI_MAIN_GROUP_DEVOPS}/{PathConf.devops_project_provisioning}"
         devops_project_provisioning = self.gl.projects.get(project_name_devops_provisioning)
 
-        # Retrieve existing variables
-        existing_variables = {var.key: var for var in devops_project_provisioning.variables.list(all=True)}
-
         for branch in GitlabEnvConf.envBranches:
             vault_secret_value  = None  
             consul_secret_value = None
@@ -234,13 +231,14 @@ class GitlabProjectManager:
             vault_manager = VaultManager()
             consul_manager = ConsulManager(ConsulAuthConf.CONSUL_URL, ConsulAuthConf.CONSUL_TOKEN, ConsulAuthConf.CONSUL_SSL_VERIFY)
 
-            if converted_secret_key not in existing_variables:
-                consul_secret_value = consul_manager.generate_consul_secret(GitlabEnvConf.CI_SUBGROUP_NAME, GitlabEnvConf.CD_HELM_NAMESPACE)
-                if branch in ["dev", "devdmz"]:
-                    vault_secret_value = vault_manager.generate_vault_secret(GitlabEnvConf.CI_SUBGROUP_NAME, "dev", GitlabEnvConf.CD_HELM_NAMESPACE)
-                if branch in ["prod", "proddmz", "procdnz"]:
-                    vault_secret_value = vault_manager.generate_vault_secret(GitlabEnvConf.CI_SUBGROUP_NAME, "prod", GitlabEnvConf.CD_HELM_NAMESPACE)
-                regcred_secret_value = TemplateGenerator.generate_k8s_regcred(GitlabAuthConf.CI_GITLAB_SERVER, GitlabAuthConf.CI_GITLAB_USERNAME, GitlabAuthConf.CI_GITLAB_PASSWORD, GitlabEnvConf.CD_HELM_NAMESPACE)
-                
-                # Write the combined secret value to Vault (using version KV V1)
-                vault_manager.write_secret_to_vault(mount_point='devops_kv', secret_path=f'{branch}/kubernetes/namespace', secret_key=CommandManager.convert_key_format(GitlabEnvConf.CD_HELM_NAMESPACE), secret_value=secret_value)        
+            consul_secret_value = consul_manager.generate_consul_secret(GitlabEnvConf.CI_SUBGROUP_NAME, GitlabEnvConf.CD_HELM_NAMESPACE)
+            if branch in ["dev", "devdmz"]:
+                vault_secret_value = vault_manager.generate_vault_secret(GitlabEnvConf.CI_SUBGROUP_NAME, "dev", GitlabEnvConf.CD_HELM_NAMESPACE)
+            if branch in ["prod", "proddmz", "procdnz"]:
+                vault_secret_value = vault_manager.generate_vault_secret(GitlabEnvConf.CI_SUBGROUP_NAME, "prod", GitlabEnvConf.CD_HELM_NAMESPACE)
+            regcred_secret_value = TemplateGenerator.generate_k8s_regcred(GitlabAuthConf.CI_GITLAB_SERVER, GitlabAuthConf.CI_GITLAB_USERNAME, GitlabAuthConf.CI_GITLAB_PASSWORD, GitlabEnvConf.CD_HELM_NAMESPACE)
+
+            secret_value = f"{regcred_secret_value}\n---\n{vault_secret_value}\n---\n{consul_secret_value}"
+            
+            # Write the combined secret value to Vault (using version KV V1)
+            vault_manager.write_secret_to_vault(mount_point='devops_kv', secret_path=f'{branch}/kubernetes/namespace', secret_key=CommandManager.convert_key_format(GitlabEnvConf.CD_HELM_NAMESPACE), secret_value=secret_value)        
