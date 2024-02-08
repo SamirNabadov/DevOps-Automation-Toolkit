@@ -131,4 +131,4 @@ deploy:
     - python3 ./main.py
   when: manual
   tags:
-    - operation-03
+    - operation
