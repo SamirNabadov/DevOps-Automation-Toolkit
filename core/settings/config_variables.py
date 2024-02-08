@@ -116,9 +116,9 @@ class PathConf:
     helm_chart_yaml: str                                    = f"{current_directory}/{chart_path}/Chart.yaml"
     helm_values_dev_yaml: str                               = f"{current_directory}/{chart_path}/develop.yaml"
     helm_values_prod_yaml: str                              = f"{current_directory}/{chart_path}/master.yaml"
-    k8s_namespace_resource_path: str                        = f"{devops_project_provisioning}/manifests/k8s_namespace_setup"
-    argo_workflow_proj_path: str                            = f"{devops_project_provisioning}/manifests/argocd_proj_workflow"
-    argo_workflow_app_path: str                             = f"{devops_project_provisioning}/manifests/argocd_app_workflow"
+    k8s_namespace_resource_path: str                        = f"{devops_project_provisioning}/manifests/k8s-namespace-setup"
+    argo_workflow_proj_path: str                            = f"{devops_project_provisioning}/manifests/argocd-proj-workflow"
+    argo_workflow_app_path: str                             = f"{devops_project_provisioning}/manifests/argocd-app-workflow"
 
 class VaultAuthConf:
     """
