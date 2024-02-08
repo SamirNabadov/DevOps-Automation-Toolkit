@@ -56,7 +56,7 @@ class TemplateGenerator:
 
     @staticmethod
     def generate_argocd_application_yaml(ci_server_host: str, cd_subgroup_name: str, ci_environment_name: str, 
-                                          cd_helm_chart_name: str, ci_branch_name: str, ci_group_name: str, 
+                                          cd_helm_chart_name: str, ci_branch_name: str, 
                                           cd_group_name: str, cd_project_name: str, cd_helm_namespace: str) -> Dict[str, Any]:
         """
         Generates an ArgoCD Application YAML configuration file.
@@ -81,7 +81,7 @@ class TemplateGenerator:
                         "valueFiles": [f"{ci_branch_name}.yaml"]
                     },
                     "path": ".",
-                    "repoURL": f"https://{ci_server_host}/{ci_group_name}/{cd_group_name}/{cd_subgroup_name}/{cd_project_name}.git",
+                    "repoURL": f"https://{ci_server_host}/{cd_group_name}/{cd_subgroup_name}/{cd_project_name}.git",
                     "targetRevision": ci_branch_name
                 },
                 "destination": {
