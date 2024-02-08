@@ -177,7 +177,7 @@ The `deploy` job within the `deploy` stage utilizes a custom Docker image pre-co
 1. **Preparation**: Sets up Git configuration and installs Python dependencies from `requirement.txt`.
 2. **Script Execution**: Runs `main.py`, which contains the logic for deploying the project to Kubernetes, managing CI/CD configurations, and handling Kubernetes and Helm charts deployments.
 
-This job is tagged as `operation-03` and requires manual intervention to trigger, providing an additional layer of control before changes are deployed.
+This job is tagged as `operation` and requires manual intervention to trigger, providing an additional layer of control before changes are deployed.
 
 ## Customizing Pipeline Variables
 
